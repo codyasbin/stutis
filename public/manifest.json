@@ -1,0 +1,28 @@
+{
+  "name": "Stuti Path - Devotional Stutis",
+  "short_name": "Stuti Path",
+  "description": "Access your daily devotional stutis with ease",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFF7ED",
+  "theme_color": "#EA580C",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "logo.png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "logo.png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "logo.png"
+    }
+  ]
+}
