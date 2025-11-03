@@ -18,8 +18,8 @@ export const metadata = {
   themeColor: '#0b77ff',
   manifest: '/manifest.webmanifest',
   icons: {
-    icon: '/icons/icon-192.png',
-    apple: '/icons/icon-192.png',
+    icon: '/logo.png',
+    apple: '/logo.png',
   },
   applicationName: 'stutis',
   appleWebApp: {

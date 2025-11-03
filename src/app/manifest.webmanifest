@@ -4,25 +4,25 @@
   "description": "Access your daily devotional stutis with ease",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#FFF7ED",
-  "theme_color": "#EA580C",
+  "background_color": "#ffffff",
+  "theme_color": "#FFA500",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/icon-192x192.png",
+      "src": "/logo.png",
       "sizes": "192x192",
-      "type": "logo.png",
+      "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/icon-384x384.png",
+      "src": "/logo.png",
       "sizes": "384x384",
-      "type": "logo.png"
+      "type": "image/png"
     },
     {
-      "src": "/icon-512x512.png",
+      "src": "/logo.png",
       "sizes": "512x512",
-      "type": "logo.png"
+      "type": "image/png"
     }
   ]
 }
