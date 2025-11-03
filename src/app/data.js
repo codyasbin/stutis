@@ -4,7 +4,7 @@ export const stutiData = [
     title: "Hanuman Chalisa",
     category: "Stuti",
     subCategory: "Hanuman Stuti",
-    image: "/hanumanChalisa.jpeg",
+    image: "/hanumanchalisa.jpeg",
   },
   {
     id: 2,

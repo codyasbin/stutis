@@ -11,15 +11,21 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+
 export const metadata = {
-  title: 'Stuti Path',
-  description: 'Access your daily devotional stutis with ease',
-  manifest: '/manifest.json',
-  themeColor: '#EA580C',
+  title: 'stutis',
+  description: 'A collection of devotional hymns and praises.',
+  themeColor: '#0b77ff',
+  manifest: '/manifest.webmanifest',
+  icons: {
+    icon: '/icons/icon-192.png',
+    apple: '/icons/icon-192.png',
+  },
+  applicationName: 'stutis',
   appleWebApp: {
     capable: true,
-    statusBarStyle: 'default',
-    title: 'Stuti Path',
+    statusBarStyle: 'black-translucent',
+    title: 'stutis',
   },
 };
 
@@ -28,12 +34,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-       <head>
-        <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#EA580C" />
-        <link rel="apple-touch-icon" href="/logo.png" />
-        <link rel="icon" href="/logo.png" />
-      </head>
+      
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
