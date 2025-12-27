@@ -18,7 +18,7 @@ export const stutiData = [
     title: "Bajrang Baan",
     category: "Stuti",
     subCategory: "Hanuman Stuti",
-    image: "/shri-bajrang-baan.webp",
+    image: "/bajarangbaan_original.jfif",
   },
   {
     id: 7,
@@ -62,6 +62,13 @@ export const stutiData = [
     category: "Stuti",
     subCategory: "Shiva Stuti",
     image: "/namamishamishan.JPG",
+  },
+  {
+     id: 13,
+    title: "Guru Aarati",
+    category: "Stuti",
+    subCategory: "Guru Stuti",
+    image: "/guru_aarati.jfif",
   },
   {
     id: 5,
