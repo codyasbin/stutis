@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Search, Menu, X, Download, Share2, ZoomIn, ZoomOut, Home, BookOpen } from "lucide-react";
+import { Search, Menu, X, Download, Share2, ZoomIn, ZoomOut, Home, BookOpen, ChevronLeft } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { stutiData } from "./data";
 
@@ -283,106 +283,110 @@ export default function HomePage() {
             ))}
               </div>
             )}
-          </motion.div>
-            ) : (
-          <motion.div
-            key="viewer"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="max-w-4xl mx-auto p-4 rounded-2xl ring-1 ring-orange-200/40 backdrop-blur-sm"
-          >
-            {/* Viewer Header */}
-              <div className="bg-white rounded-2xl shadow-lg p-4 mb-4">
-                <div className="flex items-center justify-between mb-4">
-                  <button
-                    onClick={() => setSelectedStuti(null)}
-                    className="flex items-center gap-2 text-orange-600 font-medium hover:bg-orange-50 px-4 py-2 rounded-lg transition-colors"
-                  >
-                    ← Back
-                  </button>
-                  <h2 className="font-bold text-lg text-gray-800 text-center flex-1">
-                    {selectedStuti.title}
-                  </h2>
-                  <div className="w-20" />
-                </div>
+          </div>
+        </main>
 
-                {/* Controls */}
-                <div className="flex items-center justify-center gap-3 flex-wrap">
-                  <button
-                    onClick={handleZoomOut}
-                    disabled={zoom <= 1}
-                    className="p-3 bg-orange-100 rounded-full hover:bg-orange-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <ZoomOut className="w-5 h-5 text-orange-600" />
-                  </button>
-                  <span className="text-sm font-medium text-gray-600 min-w-16 text-center">
-                    {Math.round(zoom * 100)}%
-                  </span>
-                  <button
-                    onClick={handleZoomIn}
-                    disabled={zoom >= 3}
-                    className="p-3 bg-orange-100 rounded-full hover:bg-orange-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <ZoomIn className="w-5 h-5 text-orange-600" />
-                  </button>
-                  <div className="w-px h-8 bg-orange-200 mx-2" />
-                  <button
-                    onClick={handleDownload}
-                    className="p-3 bg-orange-100 rounded-full hover:bg-orange-200 transition-colors"
-                  >
-                    <Download className="w-5 h-5 text-orange-600" />
-                  </button>
-                  <button
-                    onClick={handleShare}
-                    className="p-3 bg-orange-100 rounded-full hover:bg-orange-200 transition-colors"
-                  >
-                    <Share2 className="w-5 h-5 text-orange-600" />
-                  </button>
+        {/* Full-screen Stuti Viewer */}
+        <AnimatePresence>
+          {selectedStuti && (
+            <motion.div
+              key="viewer"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-60 bg-black flex flex-col"
+              style={{ height: "100dvh" }}
+            >
+              {/* Top bar */}
+              <div className="shrink-0 flex items-center gap-2 px-2 py-2 bg-black/70 backdrop-blur-sm text-white">
+                <button
+                  onClick={() => setSelectedStuti(null)}
+                  className="p-2 rounded-full hover:bg-white/10 active:bg-white/20 transition-colors"
+                  aria-label="Back"
+                >
+                  <ChevronLeft className="w-6 h-6" />
+                </button>
+                <h2 className="flex-1 font-semibold text-base text-center truncate px-2">
+                  {selectedStuti.title}
+                </h2>
+                <div className="w-10" />
+              </div>
+
+              {/* Image area */}
+              <div
+                className="relative flex-1 overflow-auto"
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseUp}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleMouseUp}
+              >
+                <div className="flex items-center justify-center min-h-full p-2">
+                  <img
+                    ref={imageRef}
+                    src={selectedStuti.image}
+                    alt={selectedStuti.title}
+                    style={{
+                      transform: `scale(${zoom}) translate(${position.x / zoom}px, ${position.y / zoom}px)`,
+                      cursor: zoom > 1 ? (dragging ? "grabbing" : "grab") : "default",
+                      transition: dragging ? "none" : "transform 0.2s ease-out",
+                      maxWidth: zoom === 1 ? "100%" : "none",
+                      userSelect: "none",
+                    }}
+                    className="max-h-full object-contain"
+                    draggable={false}
+                  />
                 </div>
               </div>
 
-              {/* Image Viewer */}
-              <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-                <div
-                  className="relative overflow-auto"
-                  style={{ height: "70vh" }}
-                  onMouseDown={handleMouseDown}
-                  onMouseMove={handleMouseMove}
-                  onMouseUp={handleMouseUp}
-                  onMouseLeave={handleMouseUp}
-                  onTouchStart={handleTouchStart}
-                  onTouchMove={handleTouchMove}
-                  onTouchEnd={handleMouseUp}
+              {/* Bottom control bar */}
+              <div className="shrink-0 flex items-center justify-center gap-2 px-4 py-3 bg-black/70 backdrop-blur-sm">
+                <button
+                  onClick={handleZoomOut}
+                  disabled={zoom <= 1}
+                  className="p-3 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                  aria-label="Zoom out"
                 >
-                  <div className="flex items-center justify-center min-h-full p-4">
-                    <img
-                      ref={imageRef}
-                      src={selectedStuti.image}
-                      alt={selectedStuti.title}
-                      style={{
-                        transform: `scale(${zoom}) translate(${position.x / zoom}px, ${position.y / zoom}px)`,
-                        cursor: zoom > 1 ? (dragging ? "grabbing" : "grab") : "default",
-                        transition: dragging ? "none" : "transform 0.2s ease-out",
-                        maxWidth: zoom === 1 ? "100%" : "none",
-                        userSelect: "none",
-                      }}
-                      className="max-h-full object-contain"
-                      draggable={false}
-                    />
-                  </div>
-                </div>
+                  <ZoomOut className="w-5 h-5 text-white" />
+                </button>
+                <span className="text-sm font-medium text-white/80 min-w-14 text-center">
+                  {Math.round(zoom * 100)}%
+                </span>
+                <button
+                  onClick={handleZoomIn}
+                  disabled={zoom >= 3}
+                  className="p-3 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                  aria-label="Zoom in"
+                >
+                  <ZoomIn className="w-5 h-5 text-white" />
+                </button>
+                <div className="w-px h-6 bg-white/20 mx-1" />
+                <button
+                  onClick={handleDownload}
+                  className="p-3 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 transition-colors"
+                  aria-label="Download"
+                >
+                  <Download className="w-5 h-5 text-white" />
+                </button>
+                <button
+                  onClick={handleShare}
+                  className="p-3 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 transition-colors"
+                  aria-label="Share"
+                >
+                  <Share2 className="w-5 h-5 text-white" />
+                </button>
               </div>
 
               {zoom > 1 && (
-                <p className="text-center text-sm text-gray-500 mt-4">
+                <p className="absolute bottom-20 left-0 right-0 text-center text-xs text-white/60">
                   Drag to pan • Pinch to zoom on mobile
                 </p>
               )}
             </motion.div>
           )}
         </AnimatePresence>
-      </main>
     </div>
   );
 }
