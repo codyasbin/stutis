@@ -236,16 +236,9 @@ export default function HomePage() {
         )}
       </AnimatePresence>
 
-     
+
         <main className="px-4 py-6 max-w-7xl mx-auto">
-          <AnimatePresence mode="wait">
-            {!selectedStuti ? (
-          <motion.div
-            key="grid"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-          >
+          <div>
             <div className="text-center mb-8">
               <h2 className="text-3xl font-bold mb-2 bg-linear-to-r from-orange-400 to-yellow-400 bg-clip-text text-transparent animate-pulse">
             🙏 Jay Shree Sitaram
