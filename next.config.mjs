@@ -1,9 +1,7 @@
 // next.config.mjs
 // ✅ Full Next.js PWA configuration (App Router + ESM version)
-// Install next-pwa: npm install next-pwa
 
-import nextPWA from 'next-pwa';
-import { fileURLToPath } from 'url';
+import withPWAInit from '@ducanh2912/next-pwa';
 
 const runtimeCaching = [
   {
@@ -57,16 +55,19 @@ const runtimeCaching = [
 ];
 
 // ✅ Create the PWA plugin with options
-const withPWA = nextPWA({
+const withPWA = withPWAInit({
   dest: 'public',
   register: true,
-  skipWaiting: true,
+  cacheOnFrontEndNav: true,
+  reloadOnOnline: true,
   disable: process.env.NODE_ENV === 'development',
-  buildExcludes: [/middleware-manifest\.json$/],
-  runtimeCaching,
+  // Offline fallback page is auto-detected from src/app/~offline/page.js
   fallbacks: {
-    document: '/offline.html',
-    image: '/icons/icon-192.png',
+    image: '/logo.png',
+  },
+  workboxOptions: {
+    skipWaiting: true,
+    runtimeCaching,
   },
 });
 
