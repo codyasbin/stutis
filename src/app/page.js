@@ -111,6 +111,21 @@ export default function HomePage() {
     }
   }, [selectedStuti]);
 
+  useEffect(() => {
+    document.body.style.overflow = selectedStuti ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [selectedStuti]);
+
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.key === "Escape") setSelectedStuti(null);
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, []);
+
   return (
     <div className="min-h-screen bg-linear-to-br from-orange-50 to-white">
       {/* Header */}
