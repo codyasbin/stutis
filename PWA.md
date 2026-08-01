@@ -6,6 +6,45 @@ You already have the right mental model: a **manifest** describes the app
 app can behave offline. This doc walks through how those two pieces are
 actually wired up in *this* Next.js project, file by file.
 
+## Build time vs. runtime — the part that's easy to miss
+
+`next.config.mjs` never runs in the browser. It's a recipe that only runs
+once, on your machine (or CI), when you type `npm run build`. It tells
+Next.js's build process to do two extra things it wouldn't do by default:
+
+1. **Generate a real file**: `public/sw.js` — actual JavaScript, written to
+   disk, containing the list of everything to cache and the caching rules
+   from the `runtimeCaching` array in the config.
+2. **Inject a few lines into your app's bundle** — the JS that actually
+   ships to the browser — that say roughly: *"when this page loads, call
+   `navigator.serviceWorker.register('/sw.js')`."*
+
+By the time `npm run build` finishes, the "PWA-ness" isn't in
+`next.config.mjs` anymore — it's baked into those two build outputs: the
+generated `sw.js` file, and that tiny registration snippet now living
+inside your regular page JS. The config file's job is already done.
+
+Then, **at runtime**, when a real user opens the built app in a browser:
+
+```
+user opens the app
+   → browser runs your normal page JS
+   → hits the injected registration snippet
+   → browser calls navigator.serviceWorker.register('/sw.js')
+   → browser downloads sw.js and runs it as a separate background script
+   → that background script (the service worker) starts intercepting
+     every fetch() the page makes, from here on
+```
+
+`next.config.mjs` is never involved again after the build — the browser
+only ever talks to `sw.js` and the registration snippet it already has.
+
+This is also exactly why `npm run dev` shows none of this behavior: the
+config disables the plugin in dev (`disable: process.env.NODE_ENV ===
+'development'`), so neither `sw.js` nor the registration snippet get
+generated in the first place — there's nothing for the browser to
+register. You have to build the production output to see any of it.
+
 ## The two pillars
 
 | Piece | What it does | File in this project |
