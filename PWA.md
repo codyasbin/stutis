@@ -168,6 +168,47 @@ tab possibly seeing a stale asset briefly mid-update.
 4. Reload the page / click around. Precached images and pages should still
    work; anything never cached shows the `~offline` page.
 
+## FAQ
+
+**Does offline mode require the user to "install" the app?**
+
+No. Installing (via the manifest, add-to-home-screen) only changes how the
+app *looks and launches* — standalone window, no address bar, home-screen
+icon. It doesn't gate the service worker. The moment someone visits the
+built app in any regular browser tab, the registration snippet fires,
+`sw.js` registers, and caching/offline behavior works exactly the same as
+in an "installed" instance. The two requirements that do matter are HTTPS
+(or `localhost`) and staying in the same browser/profile, since the cache
+is scoped per-origin.
+
+**Why not just use the Cache Storage API directly, without a service worker?**
+
+The Cache Storage API (`caches.open()` / `.put()` / `.match()`) is only a
+storage bucket — it's passive. It can be called from regular page JS with
+no service worker at all, but nothing automatically checks it. A plain
+`<img src="/hanumanchalisa.jpeg">` tag has no idea that bucket exists; the
+browser just fetches it over the network as usual. You'd have to manually
+`fetch()` and cache-check every single resource yourself, for every image,
+page, and script.
+
+The bigger issue is a chicken-and-egg problem: when the user is offline and
+hits refresh (or types the URL directly), the *first* thing the browser
+does is request the HTML document itself. Your page's JS — including any
+manual cache-checking logic you wrote — lives inside that very document. If
+that first request fails, your JS never loads, so it never gets the chance
+to say "check the cache instead." You can't use application code to rescue
+the request that was supposed to deliver that application code.
+
+A service worker doesn't have this problem because it isn't part of the
+page — it's a separate background script the browser keeps registered
+against the origin, independent of whether any page is open. It listens for
+the `fetch` event, which fires for every request to that origin, including
+the top-level navigation request for `/`. So it can serve from cache
+*before* the page even starts loading — which is exactly the case that
+matters for offline. Cache Storage is the fridge; the service worker is the
+one who answers the door and decides whether to grab something from the
+fridge or go to the store.
+
 ## Quick glossary
 
 - **Manifest** — a JSON file describing the app for the OS/browser (icons, name, colors, standalone mode).
