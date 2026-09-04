@@ -90,5 +90,12 @@ export const stutiData = [
     category: "Aarati",
     subCategory: "Jaykar Aarati",
     image: "/Jaykar.png",
+  },
+  {
+    id: 14,
+    title:"Ram Bhajan (nepali)",
+    category: "Bhajan",
+    subCategory: "Ram Bhajan",
+    image: "/ram_bhajan.png",
   }
 ];
